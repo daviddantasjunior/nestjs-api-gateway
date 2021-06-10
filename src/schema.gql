@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Hostel {
+  _id: ID!
+  name: String!
+  slug: String!
+}
+
+type Query {
+  findAllHostels: [Hostel!]!
+  findHostelById(_id: String!): Hostel!
+}
+
+type Mutation {
+  createHostel(createHostelInput: CreateHostelInput!): Hostel!
+  updateHostel(updateHostelInput: UpdateHostelInput!, _id: String!): Hostel!
+  deleteHostel(_id: String!): Boolean!
+}
+
+input CreateHostelInput {
+  name: String!
+  slug: String
+}
+
+input UpdateHostelInput {
+  name: String
+  slug: String
+}
