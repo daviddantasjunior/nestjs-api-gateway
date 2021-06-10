@@ -47,15 +47,20 @@ export class HostelService {
     _id: string,
     updateHostelInput: UpdateHostelInput,
   ): Promise<Hostel> {
-    const hostel = await this.clientHostel.send('find-by-id-hostel', _id);
-
+    const hostel = await this.clientHostel
+      .send('find-by-id-hostel', _id)
+      .toPromise();
     if (hostel) {
-      const hostelUpdated = await this.clientHostel.emit('update-hostel', {
+      if (!updateHostelInput.slug) {
+        updateHostelInput.slug = slug(updateHostelInput.name, {
+          lower: true,
+        });
+      }
+      const hostelUpdated = this.clientHostel.send('update-hostel', {
         _id,
         updateHostelInput,
       });
-
-      return hostelUpdated.toPromise();
+      return await hostelUpdated.toPromise();
     } else {
       throw new BadRequestException(`Hostel not registered!`);
     }
@@ -63,7 +68,7 @@ export class HostelService {
 
   async deleteHostel(_id: string): Promise<boolean> {
     const deleted = await this.clientHostel
-      .emit('delete-hostel', { _id })
+      .send('delete-hostel', { _id })
       .toPromise();
     return deleted;
   }
